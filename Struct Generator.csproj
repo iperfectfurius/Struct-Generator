@@ -7,7 +7,7 @@
     <ProjectGuid>{D0BF7FE2-4F33-48D2-9B0A-F43ACDFA222E}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Struct_Generator</RootNamespace>
-    <AssemblyName>Struct Generator</AssemblyName>
+    <AssemblyName>Struct_Generator</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
