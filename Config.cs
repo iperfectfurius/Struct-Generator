@@ -9,7 +9,9 @@ namespace Struct_Generator
 {
 	static class Config
 	{
-		static private string configPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Struct_Generator";
+		static public string configPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Struct_Generator";
+		static public string templatesPath = configPath + "\\templates";
+		static public string aplicationLocation = AppDomain.CurrentDomain.BaseDirectory;
 		public static bool projectEnvironment()
 		{
 			try
