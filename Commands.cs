@@ -88,7 +88,6 @@ namespace Struct_Generator
 				{
 					file += ".json";
 					Process.Start(Config.templatesPath + "\\" + file);
-					Console.WriteLine("abierto");
 				}
 				catch
 				{
