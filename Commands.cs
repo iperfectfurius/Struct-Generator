@@ -163,9 +163,10 @@ namespace Struct_Generator
 			Console.WriteLine("All folders have the following syntax ' \"#name\" :[contents]', and inside this brackets you can create more folders or any file '{\"#name\" : \"content\"}\r\n");
 			Console.WriteLine("Example: ");
 			Console.Write("{\r\n	\"css\": [\r\n		{\r\n			\"styles.css\": \".example{margin:0px;}\"\r\n		},\r\n");
-			Console.Write("		{\r\n       \"styles2.css\":	\"css code...\"\r\n		}\r\n	],\r\n");
+			Console.Write("		{\r\n			\"styles2.css\":	\"css code...\"\r\n		}\r\n	],\r\n");
 			Console.Write("	\"config.ini\":	\"config-file:...\",\r\n");
-			Console.Write("	\"config.ini\":	\"config-file:...\",\r\n");
+			Console.Write("	\"img\":	[\r\n		{\r\n			\"Exterior\": [\r\n				{}\r\n			]\r\n		},\r\n");
+			Console.Write("		{\r\n			\"Interior:\" [\r\n				{}\r\n			]\r\n		}\r\n	]");
 			Console.Write("	\r\n}");
 
 
