@@ -13,23 +13,23 @@ namespace Struct_Generator
 		static private string template;
 		static private string options;//Futuro
 		static private bool arguments;
-		static private string[] commands = {"list","generators"};
 		static private string current_directory = Environment.CurrentDirectory;
 		static void Main(string[] args)
-		{		
+		{
+			Console.Title = "Struct Generator";
 
 			if (Config.projectEnvironment())
 			{
 				if (args.Length < 1)
 				{
-					Console.WriteLine("Current Version: "  + Assembly.GetExecutingAssembly().GetName().Version.ToString());
+					Console.WriteLine("Current Version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString());
 					Console.WriteLine("Please write any arguments:('-i' for interface,type help for more info)");
 					Console.WriteLine("Folder target: " + current_directory);
 				}
 				else
 					arguments = true;
 
-				while(!arguments)
+				while (!arguments)
 				{
 					string line = Console.ReadLine();
 
@@ -43,15 +43,28 @@ namespace Struct_Generator
 						case "help":
 							Commands.list();
 							break;
+						case "help -n":
+							Commands.example();
+							break;
 						case "templates":
 							Commands.templates();
 							break;
 						case var template when (Regex.Match(line.ToLower(), @"\b(templates)\b \w*", RegexOptions.IgnoreCase).Success):
-							Console.WriteLine("Regex");
 							Commands.openTemplate(line.ToLower().Split(' ')[1]);
 							break;
+						case var template when (Regex.Match(line.ToLower().Trim(), @".[-n] \w*", RegexOptions.IgnoreCase).Success):
+							if (line.ToLower().Trim().Length < 5)
+							{
+								Console.WriteLine("Name length is too small!");
+								continue;
+							}
+							if (Commands.createTemplate(line.ToLower().Split(' ')[1]))
+							{
+								args = args.Concat(new string[] { "-t", line.ToLower().Split(' ')[1] }).ToArray();
+							}
+							break;
 						case "setpath":
-							Commands.setPath();
+							Config.setPath();
 							break;
 						default:
 							foreach (string s in line.Split(' '))
@@ -59,7 +72,6 @@ namespace Struct_Generator
 							break;
 
 					}
-					
 
 
 				}
@@ -70,9 +82,9 @@ namespace Struct_Generator
 					Console.WriteLine(s);
 				}
 			}
-			
+
 			Console.Read();
-			
+
 		}
 	}
 }

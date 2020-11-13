@@ -28,5 +28,23 @@ namespace Struct_Generator
 			
 				
 		}
+		public static bool setPath()
+		{
+			Console.Clear();
+			try
+			{
+				var scope = EnvironmentVariableTarget.Machine;
+				string oldValue = Environment.GetEnvironmentVariable("Path", scope);
+				Environment.SetEnvironmentVariable("Path", oldValue + ";" + aplicationLocation, scope);
+				Console.WriteLine("Variable de entorno añadida.");
+				return true;
+			}
+			catch
+			{
+				Console.WriteLine("Es necesario permisos de administrador para esta acción!");
+				return false;
+			}
+
+		}
 	}
 }
