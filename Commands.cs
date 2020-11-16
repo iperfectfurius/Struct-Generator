@@ -14,7 +14,7 @@ namespace Struct_Generator
 		{
 			Console.Clear();
 			Console.WriteLine("list:			Display all commands available.\r\n");
-			Console.WriteLine("help -n:			Display and explain an expample template.\r\n");
+			Console.WriteLine("help -n:		Display and explain an expample template.\r\n");
 			Console.WriteLine("templates:		Display all templates available(" + Config.configPath + ")\r\n");
 			Console.WriteLine("templates [template]:	Open template file.\r\n");
 			Console.WriteLine("-n [template]:		Create a new template.\r\n");
@@ -162,12 +162,46 @@ namespace Struct_Generator
 			Console.WriteLine("Default template folder(can't be changed): " + Config.templatesPath + "\r\n");
 			Console.WriteLine("All folders have the following syntax ' \"#name\" :[contents]', and inside this brackets you can create more folders or any file '{\"#name\" : \"content\"}\r\n");
 			Console.WriteLine("Example: ");
-			Console.Write("{\r\n	\"css\": [\r\n		{\r\n			\"styles.css\": \".example{margin:0px;}\"\r\n		},\r\n");
-			Console.Write("		{\r\n			\"styles2.css\":	\"css code...\"\r\n		}\r\n	],\r\n");
-			Console.Write("	\"config.ini\":	\"config-file:...\",\r\n");
-			Console.Write("	\"img\":	[\r\n		{\r\n			\"Exterior\": [\r\n				{}\r\n			]\r\n		},\r\n");
-			Console.Write("		{\r\n			\"Interior:\" [\r\n				{}\r\n			]\r\n		}\r\n	]");
-			Console.Write("	\r\n}");
+			Console.Write(@"{
+
+		""css"": [
+			{
+				""styles.css"": "".example{margin:0px;}"",
+					""styles2.css"": ""css code...""
+			}
+			],
+        ""config.ini"": ""config-file:..."",
+        ""img"": [
+                  {
+                        ""Exterior"": [
+				     {
+                                        ""file.txt"": ""file content"",
+                                        ""file2.txt"": ""file content""
+				     }
+                        ],
+                        ""Interior"": [
+                                     {
+                                        ""another.txt"": ""content"",
+                                        ""another2.txt"": ""more content""
+				      }
+                        ]
+                  }
+        ]
+}");
+			Console.WriteLine("\r\n...");
+			int pos = Console.CursorTop;
+			Console.SetWindowPosition(0, 0);
+
+			Console.ReadLine();
+			//Console.SetCursorPosition(4, pos);
+			//Console.ReadLine();
+			//Console.SetCursorPosition(0, pos++);
+			Console.WriteLine("Structre of example:\r\n");
+			Console.WriteLine(@"
+├────Target_folder
+│	├────css
+		 ├────styles.css
+		 ├────styles2.css");
 
 
 		}
