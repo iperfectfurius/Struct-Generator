@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Struct_Generator
 {
 	static class Commands
@@ -17,6 +18,7 @@ namespace Struct_Generator
 			Console.WriteLine("help -n:		Display and explain an expample template.\r\n");
 			Console.WriteLine("templates:		Display all templates available(" + Config.configPath + ")\r\n");
 			Console.WriteLine("templates [template]:	Open template file.\r\n");
+			Console.WriteLine("templates -c:		Create a template that contains all of target folder (BETA)");
 			Console.WriteLine("-n [template]:		Create a new template.\r\n");
 			Console.WriteLine("-t [template]:		Set a template for a target folder\r\n");
 			Console.WriteLine("setpath:		Add a path variable to this aplication (if you move this application to a new folder you need to set again this command)\r\n");
@@ -150,7 +152,36 @@ namespace Struct_Generator
 			
 
 		}
-		public static void generateStructure(string templateName)
+		public static void createTemplateBase(string templateName)
+		{
+			//expected recursion method work in progress
+			string[] folders = Directory.GetDirectories(Environment.CurrentDirectory);
+			
+			
+			foreach(string folder in folders)
+			{
+
+				Dictionary<string, Dictionary<string,string>> content = new Dictionary<string, Dictionary<string, string>>();
+				string folder_name = folder.Split('\\')[folder.Split('\\').Length - 1];
+				content.Add(folder_name,folderContent(folder));
+
+				string[] files = Directory.GetFiles(folder);
+				foreach(string file in files)
+				{
+					//verificar si es legible
+					string file_name = file.Split('\\')[file.Split('\\').Length - 1];
+					string file_content = File.ReadAllText(file);
+					content.Add(file_name,file_content);
+				}
+				
+				Program.template.Add(folder_name, content);
+
+			}
+			
+
+		}
+
+		private static Dictionary<string,string> folderContent(string folder)
 		{
 
 		}
@@ -189,13 +220,11 @@ namespace Struct_Generator
         ]
 }");
 			Console.WriteLine("\r\n...");
-			int pos = Console.CursorTop;
 			Console.SetWindowPosition(0, 0);
 
 			Console.ReadLine();
-			//Console.SetCursorPosition(4, pos);
-			//Console.ReadLine();
-			//Console.SetCursorPosition(0, pos++);
+			
+
 			Console.WriteLine("Structre of example:\r\n");
 			Console.WriteLine(@"
 ├────Target_folder
