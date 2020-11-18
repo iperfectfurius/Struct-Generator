@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -88,7 +89,7 @@ namespace Struct_Generator
 			}
 
 		}
-		public static bool createTemplate(string name)
+		public static bool createTemplateExample(string name)
 		{
 
 			if (validateTemplates(Directory.GetFiles(Config.templatesPath)).Any(name.Equals))
@@ -103,7 +104,7 @@ namespace Struct_Generator
 				template.Start();
 				template.WaitForExit();
 
-				
+
 			}
 			else
 			{
@@ -119,7 +120,7 @@ namespace Struct_Generator
 				template.StartInfo.FileName = Config.templatesPath + "\\" + name;
 				template.EnableRaisingEvents = true;
 				template.Exited += new EventHandler(closedProcess);
-				
+
 				template.Start();
 				template.WaitForExit();
 				template.Dispose();
@@ -149,41 +150,66 @@ namespace Struct_Generator
 		{
 			Console.Clear();
 			Console.WriteLine("cerrado!");
-			
+
 
 		}
 		public static void createTemplateBase(string templateName)
 		{
-			//expected recursion method work in progress
+			JObject template = new JObject();
 			string[] folders = Directory.GetDirectories(Environment.CurrentDirectory);
-			
-			
-			foreach(string folder in folders)
+
+
+			foreach (string folder in folders)
 			{
-
-				Dictionary<string, Dictionary<string,string>> content = new Dictionary<string, Dictionary<string, string>>();
 				string folder_name = folder.Split('\\')[folder.Split('\\').Length - 1];
-				content.Add(folder_name,folderContent(folder));
-
-				string[] files = Directory.GetFiles(folder);
-				foreach(string file in files)
-				{
-					//verificar si es legible
-					string file_name = file.Split('\\')[file.Split('\\').Length - 1];
-					string file_content = File.ReadAllText(file);
-					content.Add(file_name,file_content);
-				}
-				
-				Program.template.Add(folder_name, content);
+				template.Add(new JProperty(folder_name,new JArray(folderContent(folder_name, new JObject()))));
 
 			}
-			
+
+			File.WriteAllText("result.json", template.ToString());
 
 		}
-
-		private static Dictionary<string,string> folderContent(string folder)
+		private static JObject folderContent(string folder, JObject parent_folder)
 		{
 
+			Console.WriteLine("Adding -> " + folder);
+
+
+			if (Directory.GetDirectories(folder).Length > 0 || Directory.GetFiles(folder).Length > 0)
+			{
+				string[] sub_directories = Directory.GetDirectories(folder);
+
+				foreach (string dir in sub_directories)
+				{
+					string dir_name = dir.Split('\\')[dir.Split('\\').Length - 1];
+
+					parent_folder.Add(new JProperty(dir_name,
+						new JArray(folderContent(dir,new JObject()))));
+
+					if (Directory.GetFiles(dir).Length > 0)
+					{
+						JArray myarray = (JArray)parent_folder[dir_name];
+
+						JObject item = (JObject)myarray[0];
+
+
+						foreach (string file in Directory.GetFiles(dir))
+						{
+							string file_name = file.Split('\\')[file.Split('\\').Length - 1];
+							string content = File.ReadAllText(file);
+
+							item.Add(new JProperty(file_name, content));
+
+						}
+					}				
+
+				}
+
+
+
+				return parent_folder;
+			}
+			return parent_folder;
 		}
 
 		public static void example()
@@ -223,7 +249,7 @@ namespace Struct_Generator
 			Console.SetWindowPosition(0, 0);
 
 			Console.ReadLine();
-			
+
 
 			Console.WriteLine("Structre of example:\r\n");
 			Console.WriteLine(@"

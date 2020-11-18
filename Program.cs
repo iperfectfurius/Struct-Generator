@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using Newtonsoft.Json;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Linq;
+using System.IO;
 
 namespace Struct_Generator
 {
@@ -13,7 +16,6 @@ namespace Struct_Generator
 		static private string options;//Futuro
 		static private bool arguments;
 		static private string current_directory = Environment.CurrentDirectory;
-		static public Dictionary <string,Dictionary<string,string>> template = new Dictionary<string, Dictionary<string, string>>();
 		static void Main(string[] args)
 		{
 			Console.Clear();
@@ -55,7 +57,7 @@ namespace Struct_Generator
 							break;
 						case "templates -c":
 							Commands.createTemplateBase(line.ToLower());
-							Console.ReadLine();
+							
 							break;
 						case var template when (Regex.Match(line.ToLower(), @"\b(templates)\b \w*", RegexOptions.IgnoreCase).Success):
 							Commands.openTemplate(line.ToLower().Split(' ')[1]);
@@ -66,7 +68,7 @@ namespace Struct_Generator
 								Console.WriteLine("Name length is too small!");
 								continue;
 							}
-							if (Commands.createTemplate(line.ToLower().Split(' ')[1]))
+							if (Commands.createTemplateExample(line.ToLower().Split(' ')[1]))
 							{
 								args = args.Concat(new string[] { "-t", line.ToLower().Split(' ')[1] }).ToArray();
 							}
