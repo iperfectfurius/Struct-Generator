@@ -19,7 +19,7 @@ namespace Struct_Generator
 			Console.WriteLine("help -n:		Display and explain an expample template.\r\n");
 			Console.WriteLine("templates:		Display all templates available(" + Config.configPath + ")\r\n");
 			Console.WriteLine("templates [template]:	Open template file.\r\n");
-			Console.WriteLine("templates -c:		Create a template that contains all of target folder (BETA)");
+			Console.WriteLine("templates -c:		Create a template that contains all of target folder (BETA)\r\n");
 			Console.WriteLine("-n [template]:		Create a new template.\r\n");
 			Console.WriteLine("-t [template]:		Set a template for a target folder\r\n");
 			Console.WriteLine("setpath:		Add a path variable to this aplication (if you move this application to a new folder you need to set again this command)\r\n");
@@ -243,13 +243,25 @@ namespace Struct_Generator
 				//Console.WriteLine(templateName + " yes");
 				JObject template = JObject.Parse(File.ReadAllText(Config.templatesPath + "\\" + templateName));
 				createFolder(template, Environment.CurrentDirectory);
-				Console.WriteLine();
-
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.WriteLine("Structure done!");
+				Console.ForegroundColor = ConsoleColor.White;
 			}
 
 			else
 			{
-				Console.WriteLine("Couldn't find any template with that name");
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine("Couldn't find any template with that name!");
+				Console.ForegroundColor = ConsoleColor.White;
+
+				Console.WriteLine("List:");
+				Console.ForegroundColor = ConsoleColor.Blue;
+
+				foreach (string template in  validateTemplates(Directory.GetFiles(Config.templatesPath)))
+				{
+					Console.WriteLine(template);
+				}
+				Console.ForegroundColor = ConsoleColor.White;
 			}
 
 		}
