@@ -56,13 +56,15 @@ namespace Struct_Generator
 							Commands.templates();
 							break;
 						case "templates -c":
-							Commands.createTemplateBase(line.ToLower());
-							
+							Commands.createTemplateBase();						
+							break;
+						case var template when (Regex.Match(line.ToLower(), @"\b(templates)\b -a \w{2}", RegexOptions.IgnoreCase).Success):
+							Commands.createStructure(line.ToLower().Split(' ')[2]);
 							break;
 						case var template when (Regex.Match(line.ToLower(), @"\b(templates)\b \w*", RegexOptions.IgnoreCase).Success):
 							Commands.openTemplate(line.ToLower().Split(' ')[1]);
 							break;
-						case var template when (Regex.Match(line.ToLower().Trim(), @".[-n] \w*", RegexOptions.IgnoreCase).Success):
+						case var template when (Regex.Match(line.ToLower(), @".[-n] \w*", RegexOptions.IgnoreCase).Success):
 							if (line.ToLower().Trim().Length < 5)
 							{
 								Console.WriteLine("Name length is too small!");

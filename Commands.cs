@@ -69,7 +69,7 @@ namespace Struct_Generator
 		}
 		public static void openTemplate(string file)
 		{
-
+			//revisar si necesita equals
 			if (validateTemplates(Directory.GetFiles(Config.templatesPath)).Any(file.Contains))
 			{
 				try
@@ -153,23 +153,44 @@ namespace Struct_Generator
 
 
 		}
-		public static void createTemplateBase(string templateName)
+		public static void createTemplateBase()
 		{
-			JObject template = new JObject();
-			string[] folders = Directory.GetDirectories(Environment.CurrentDirectory);
+			Console.WriteLine("Please write a name for the template");
+			string name = Console.ReadLine();
 
+			while (validateTemplates(Directory.GetFiles(Config.templatesPath)).Any(name.Equals))
+			{
+				Console.WriteLine("There is already a template with that name! Please write a name for the template");
+				name = Console.ReadLine();
+			}
+			name += ".json";
+			JObject template = new JObject();
+
+			string[] folders = Directory.GetDirectories(Environment.CurrentDirectory);
 
 			foreach (string folder in folders)
 			{
 				string folder_name = folder.Split('\\')[folder.Split('\\').Length - 1];
-				template.Add(new JProperty(folder_name,new JArray(folderContent(folder_name, new JObject()))));
+				template.Add(new JProperty(folder_name, new JArray(folderContent(folder_name, new JObject()))));
 
 			}
 
-			File.WriteAllText("result.json", template.ToString());
+
+			//load files info from root folder template
+			foreach (string file in Directory.GetFiles(Environment.CurrentDirectory))
+			{
+				string file_name = file.Split('\\')[file.Split('\\').Length - 1];
+				string content = File.ReadAllText(file);
+
+				template.Add(new JProperty(file_name, content));
+
+			}
+
+			Console.WriteLine("Saved as: " + name);
+			File.WriteAllText(Config.templatesPath + "\\" + name, template.ToString());
 
 		}
-		private static JObject folderContent(string folder, JObject parent_folder)
+		private static JObject folderContent(string folder, JObject parent_folder)//recursive
 		{
 
 			Console.WriteLine("Adding -> " + folder);
@@ -184,10 +205,11 @@ namespace Struct_Generator
 					string dir_name = dir.Split('\\')[dir.Split('\\').Length - 1];
 
 					parent_folder.Add(new JProperty(dir_name,
-						new JArray(folderContent(dir,new JObject()))));
+						new JArray(folderContent(dir, new JObject()))));
 
 					if (Directory.GetFiles(dir).Length > 0)
 					{
+
 						JArray myarray = (JArray)parent_folder[dir_name];
 
 						JObject item = (JObject)myarray[0];
@@ -195,25 +217,98 @@ namespace Struct_Generator
 
 						foreach (string file in Directory.GetFiles(dir))
 						{
+							Console.WriteLine("Adding -> " + file);
+
 							string file_name = file.Split('\\')[file.Split('\\').Length - 1];
 							string content = File.ReadAllText(file);
 
 							item.Add(new JProperty(file_name, content));
 
 						}
-					}				
+					}
 
 				}
-
-
 
 				return parent_folder;
 			}
 			return parent_folder;
 		}
 
+		public static void createStructure(string templateName)
+		{
+			Console.WriteLine(templateName);
+			if (validateTemplates(Directory.GetFiles(Config.templatesPath)).Any(templateName.Equals))
+			{
+				templateName += ".json";
+				//Console.WriteLine(templateName + " yes");
+				JObject template = JObject.Parse(File.ReadAllText(Config.templatesPath + "\\" + templateName));
+				createFolder(template, Config.aplicationLocation);
+				Console.WriteLine();
+
+			}
+
+			else
+			{
+				Console.WriteLine("Couldn't find any template with that name");
+			}
+
+		}
+
+		private static void createFolder(JObject folder, string path)
+		{
+			foreach (var subfolder in folder)
+			{
+				//Console.WriteLine(subfolder.Key);
+				if (folder[subfolder.Key].Type == JTokenType.Array)
+				{
+					Directory.CreateDirectory(path + "\\" + subfolder.Key);
+					Console.WriteLine("Adding");
+				}
+				else
+				{
+					StreamWriter sw = File.CreateText(path + "\\" + subfolder.Key);
+					sw.WriteLine(subfolder.Value.ToString());
+					sw.Close();
+					sw.Dispose();
+
+				}
+
+				foreach (JObject y in folder[subfolder.Key])
+				{
+					createFolder(y, path + "\\" + subfolder.Key);
+					foreach (var prop in y)
+					{
+						if (y[prop.Key].Type != JTokenType.Array)
+						{
+							//Console.WriteLine("Se ha encontrado el archivo: " + prop.Key + " " + prop.GetType().ToString());
+						}
+					}
+					//Console.WriteLine(y.Children().ToString());
+				}
+				//IList<JToken> results = folder[subfolder.Key].Children().ToList();
+
+				/*JObject child = new JObject(new JProperty (subfolder.ToString() ,subfolder.Children()));
+				createFolder(child);*/
+
+
+				//Console.WriteLine("Web aqui hi ha algo!: " + subfolder);
+
+				/*foreach (var subfolder2 in folder[subfolder.Key])
+				{
+					Console.WriteLine(subfolder2.ToString());
+				}
+				//JObject x = new JObject { new JProperty(subfolder.ToString(), subfolder.Value(subfolder)) };
+				if (folder[subfolder.Key].Type == JTokenType.Array)
+				{
+					//createFolder(x);
+				}*/
+
+
+			}
+		}
 		public static void example()
 		{
+			//not finished
 			Console.Clear();
 			Console.WriteLine("All templates must be.json to apply. Please consider to read documetation of application.");
 			Console.WriteLine("Default template folder(can't be changed): " + Config.templatesPath + "\r\n");

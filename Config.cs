@@ -41,7 +41,7 @@ namespace Struct_Generator
 			}
 			catch
 			{
-				Console.WriteLine("Es necesario permisos de administrador para esta acción!");
+				Console.WriteLine("Is mandatory open with elevated permisions");
 				return false;
 			}
 
