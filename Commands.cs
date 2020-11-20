@@ -242,7 +242,7 @@ namespace Struct_Generator
 				templateName += ".json";
 				//Console.WriteLine(templateName + " yes");
 				JObject template = JObject.Parse(File.ReadAllText(Config.templatesPath + "\\" + templateName));
-				createFolder(template, Config.aplicationLocation);
+				createFolder(template, Environment.CurrentDirectory);
 				Console.WriteLine();
 
 			}
@@ -262,7 +262,7 @@ namespace Struct_Generator
 				if (folder[subfolder.Key].Type == JTokenType.Array)
 				{
 					Directory.CreateDirectory(path + "\\" + subfolder.Key);
-					Console.WriteLine("Adding");
+					Console.WriteLine("Adding Dir ->	" + path + "\\" + subfolder.Key);
 				}
 				else
 				{
@@ -270,39 +270,14 @@ namespace Struct_Generator
 					sw.WriteLine(subfolder.Value.ToString());
 					sw.Close();
 					sw.Dispose();
-
+					Console.WriteLine("Adding File ->	" + path + "\\" + subfolder.Key);
 				}
 
 				foreach (JObject y in folder[subfolder.Key])
 				{
 					createFolder(y, path + "\\" + subfolder.Key);
-					foreach (var prop in y)
-					{
-						if (y[prop.Key].Type != JTokenType.Array)
-						{
-							//Console.WriteLine("Se ha encontrado el archivo: " + prop.Key + " " + prop.GetType().ToString());
-						}
-					}
-					//Console.WriteLine(y.Children().ToString());
+					
 				}
-				//IList<JToken> results = folder[subfolder.Key].Children().ToList();
-
-				/*JObject child = new JObject(new JProperty (subfolder.ToString() ,subfolder.Children()));
-				createFolder(child);*/
-
-
-				//Console.WriteLine("Web aqui hi ha algo!: " + subfolder);
-
-				/*foreach (var subfolder2 in folder[subfolder.Key])
-				{
-					Console.WriteLine(subfolder2.ToString());
-				}
-				//JObject x = new JObject { new JProperty(subfolder.ToString(), subfolder.Value(subfolder)) };
-				if (folder[subfolder.Key].Type == JTokenType.Array)
-				{
-					//createFolder(x);
-				}*/
-
 
 			}
 		}
