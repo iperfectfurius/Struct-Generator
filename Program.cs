@@ -14,13 +14,13 @@ namespace Struct_Generator
 	class Program
 	{
 		static private string options;//Futuro
-		static private bool arguments;
 		static private string current_directory = Environment.CurrentDirectory;
 		static void Main(string[] args)
 		{
 			Console.Clear();
 			Console.Title = "Struct Generator";
 
+			bool arguments = false;
 
 			if (Config.projectEnvironment())
 			{
@@ -79,23 +79,33 @@ namespace Struct_Generator
 							Config.setPath();
 							break;
 						default:
-							foreach (string s in line.Split(' '))
-								args = args.Concat(new string[] { s }).ToArray();
+							Console.WriteLine("Invalid command or argument");
 							break;
 
 					}
 
 
 				}
-				Console.WriteLine("Parametros guardados:");
-
-				foreach (string s in args)
-				{
-					Console.WriteLine(s);
-				}
+				
 			}
 
-			Console.Read();
+			switch (String.Join(" ", args))
+			{
+				case var template when (Regex.Match(String.Join(" ", args).ToLower(), @"-a \w{1}", RegexOptions.IgnoreCase).Success):
+					Commands.createStructure(args[args.Length-1]);
+					break;
+				case "-c":
+					Commands.createTemplateBase();
+					break;
+				case "templates":
+					Commands.templates();
+					break;
+				default:
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine("Invalid Arguments, write structe_generator whithout arguments for more info.");
+					break;
+			}
+			Console.ForegroundColor = ConsoleColor.White;
 
 		}
 	}

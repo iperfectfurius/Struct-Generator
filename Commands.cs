@@ -183,6 +183,7 @@ namespace Struct_Generator
 				string content = File.ReadAllText(file);
 
 				template.Add(new JProperty(file_name, content));
+				Console.WriteLine("Adding -> " + file_name);
 
 			}
 
@@ -240,7 +241,6 @@ namespace Struct_Generator
 			if (validateTemplates(Directory.GetFiles(Config.templatesPath)).Any(templateName.Equals))
 			{
 				templateName += ".json";
-				//Console.WriteLine(templateName + " yes");
 				JObject template = JObject.Parse(File.ReadAllText(Config.templatesPath + "\\" + templateName));
 				createFolder(template, Environment.CurrentDirectory);
 				Console.ForegroundColor = ConsoleColor.Green;
@@ -254,7 +254,7 @@ namespace Struct_Generator
 				Console.WriteLine("Couldn't find any template with that name!");
 				Console.ForegroundColor = ConsoleColor.White;
 
-				Console.WriteLine("List:");
+				Console.WriteLine("List of templates:");
 				Console.ForegroundColor = ConsoleColor.Blue;
 
 				foreach (string template in  validateTemplates(Directory.GetFiles(Config.templatesPath)))
@@ -270,7 +270,6 @@ namespace Struct_Generator
 		{
 			foreach (var subfolder in folder)
 			{
-				//Console.WriteLine(subfolder.Key);
 				if (folder[subfolder.Key].Type == JTokenType.Array)
 				{
 					Directory.CreateDirectory(path + "\\" + subfolder.Key);
