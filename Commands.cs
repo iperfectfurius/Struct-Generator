@@ -153,10 +153,10 @@ namespace Struct_Generator
 
 
 		}
-		public static void createTemplateBase()
+		public static void createTemplateBase(string templateName)
 		{
 			Console.WriteLine("Please write a name for the template");
-			string name = Console.ReadLine();
+			string name = templateName == "" ? Console.ReadLine() : templateName;
 
 			while (validateTemplates(Directory.GetFiles(Config.templatesPath)).Any(name.Equals))
 			{

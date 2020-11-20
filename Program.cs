@@ -56,7 +56,7 @@ namespace Struct_Generator
 							Commands.templates();
 							break;
 						case "templates -c":
-							Commands.createTemplateBase();						
+							Commands.createTemplateBase("");						
 							break;
 						case var template when (Regex.Match(line.ToLower(), @"\b(templates)\b -a \w{2}", RegexOptions.IgnoreCase).Success):
 							Commands.createStructure(line.ToLower().Split(' ')[2]);
@@ -94,8 +94,8 @@ namespace Struct_Generator
 				case var template when (Regex.Match(String.Join(" ", args).ToLower(), @"-a \w{1}", RegexOptions.IgnoreCase).Success):
 					Commands.createStructure(args[args.Length-1]);
 					break;
-				case "-c":
-					Commands.createTemplateBase();
+				case var template when (Regex.Match(String.Join(" ", args).ToLower(), @"-c \w{1}", RegexOptions.IgnoreCase).Success):
+					Commands.createTemplateBase(args[1]);
 					break;
 				case "templates":
 					Commands.templates();
