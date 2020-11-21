@@ -70,10 +70,7 @@ namespace Struct_Generator
 								Console.WriteLine("Name length is too small!");
 								continue;
 							}
-							if (Commands.createTemplateExample(line.ToLower().Split(' ')[1]))
-							{
-								args = args.Concat(new string[] { "-t", line.ToLower().Split(' ')[1] }).ToArray();
-							}
+							Commands.createTemplateExample(line.ToLower().Split(' ')[1]);
 							break;
 						case "setpath":
 							Config.setPath();

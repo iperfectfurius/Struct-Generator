@@ -29,7 +29,7 @@ namespace Struct_Generator
 			Console.Clear();
 			try
 			{
-				//Get files and verify if is valid
+				//Get files and verify if is valid and return a list of templates
 				string[] valid_templates = validateTemplates(Directory.GetFiles(Config.templatesPath));
 
 				if (valid_templates.Length > 0)
@@ -45,7 +45,6 @@ namespace Struct_Generator
 				{
 					Console.WriteLine("No templates found!");
 				}
-
 			}
 			catch
 			{
@@ -55,6 +54,7 @@ namespace Struct_Generator
 		}
 		private static string[] validateTemplates(string[] templates)
 		{
+			//verify .json files
 			string[] valid_templates = new string[0];
 
 			foreach (string template in templates)
@@ -69,7 +69,7 @@ namespace Struct_Generator
 		}
 		public static void openTemplate(string file)
 		{
-			//revisar si necesita equals
+			//Open a template if is valid.
 			if (validateTemplates(Directory.GetFiles(Config.templatesPath)).Any(file.Contains))
 			{
 				try
@@ -89,8 +89,9 @@ namespace Struct_Generator
 			}
 
 		}
-		public static bool createTemplateExample(string name)
+		public static void createTemplateExample(string name)
 		{
+			//Create and open an new template
 
 			if (validateTemplates(Directory.GetFiles(Config.templatesPath)).Any(name.Equals))
 			{
@@ -99,8 +100,7 @@ namespace Struct_Generator
 				Process template = new Process();
 				template.StartInfo.FileName = Config.templatesPath + "\\" + name;
 				template.EnableRaisingEvents = true;
-				template.Exited += new EventHandler(closedProcess);
-				Console.WriteLine("Existe");
+				Console.WriteLine("There is a template with that name");
 				template.Start();
 				template.WaitForExit();
 
@@ -119,7 +119,6 @@ namespace Struct_Generator
 				template.StartInfo.RedirectStandardError = false;
 				template.StartInfo.FileName = Config.templatesPath + "\\" + name;
 				template.EnableRaisingEvents = true;
-				template.Exited += new EventHandler(closedProcess);
 
 				template.Start();
 				template.WaitForExit();
@@ -129,32 +128,13 @@ namespace Struct_Generator
 			}
 
 			Console.Clear();
-			Console.WriteLine("Do you want to apply the template?('y' for generate / 'n' for return to menu)");
-
-			string line = Console.ReadLine().ToLower();
-
-			while (!line.Equals("y") && !line.Equals("n"))
-			{
-				Console.WriteLine("Please write (y/n)");
-				Console.WriteLine(line);
-				line = Console.ReadLine();
-			}
-
-			if (line == "y")
-				return true;
-
-			return false;
-
-		}
-		private static void closedProcess(object sender, System.EventArgs e)
-		{
-			Console.Clear();
-			Console.WriteLine("cerrado!");
-
+			Console.WriteLine("Name of template: " + name.Split('.')[0]);
 
 		}
 		public static void createTemplateBase(string templateName)
 		{
+			//Create new template based on existing estructure.
+
 			Console.WriteLine("Please write a name for the template");
 			string name = templateName == "" ? Console.ReadLine() : templateName;
 
@@ -168,6 +148,8 @@ namespace Struct_Generator
 
 			string[] folders = Directory.GetDirectories(Environment.CurrentDirectory);
 
+			//add all dirs from root folder target
+
 			foreach (string folder in folders)
 			{
 				string folder_name = folder.Split('\\')[folder.Split('\\').Length - 1];
@@ -175,8 +157,7 @@ namespace Struct_Generator
 
 			}
 
-
-			//load files info from root folder template
+			//add files from root folder target
 			foreach (string file in Directory.GetFiles(Environment.CurrentDirectory))
 			{
 				string file_name = file.Split('\\')[file.Split('\\').Length - 1];
@@ -191,8 +172,9 @@ namespace Struct_Generator
 			File.WriteAllText(Config.templatesPath + "\\" + name, template.ToString());
 
 		}
-		private static JObject folderContent(string folder, JObject parent_folder)//recursive
+		private static JObject folderContent(string folder, JObject parent_folder)
 		{
+			//Recursive method that adds all files and dirs to a template. 
 
 			Console.WriteLine("Adding -> " + folder);
 
@@ -237,12 +219,13 @@ namespace Struct_Generator
 
 		public static void createStructure(string templateName)
 		{
+			//Create all structure from template to the target folder. PD Care of binary files!
 			Console.WriteLine(templateName);
 			if (validateTemplates(Directory.GetFiles(Config.templatesPath)).Any(templateName.Equals))
 			{
 				templateName += ".json";
 				JObject template = JObject.Parse(File.ReadAllText(Config.templatesPath + "\\" + templateName));
-				createFolder(template, Environment.CurrentDirectory);
+				createTemplateFolder(template, Environment.CurrentDirectory);
 				Console.ForegroundColor = ConsoleColor.Green;
 				Console.WriteLine("Structure done!");
 				Console.ForegroundColor = ConsoleColor.White;
@@ -266,8 +249,9 @@ namespace Struct_Generator
 
 		}
 
-		private static void createFolder(JObject folder, string path)
+		private static void createTemplateFolder(JObject folder, string path)
 		{
+			//Create all files and directories from template 
 			foreach (var subfolder in folder)
 			{
 				if (folder[subfolder.Key].Type == JTokenType.Array)
@@ -286,7 +270,7 @@ namespace Struct_Generator
 
 				foreach (JObject y in folder[subfolder.Key])
 				{
-					createFolder(y, path + "\\" + subfolder.Key);
+					createTemplateFolder(y, path + "\\" + subfolder.Key);
 					
 				}
 
