@@ -159,7 +159,24 @@ namespace Struct_Generator
 			foreach (string folder in folders)
 			{
 				string folder_name = folder.Split('\\')[folder.Split('\\').Length - 1];
+				//Aggregate all content of subfolders
 				template.Add(new JProperty(folder_name, new JArray(folderContent(folder_name, new JObject()))));
+
+				//Only files of this parent's folders
+				JArray myarray = (JArray)template[folder_name];
+
+				JObject item = (JObject)myarray[0];
+
+
+				foreach (string file in Directory.GetFiles(folder))
+				{
+					string file_name = file.Split('\\')[file.Split('\\').Length - 1];
+					Console.WriteLine("Adding -> " + folder_name +"\\"+ file_name);
+					string content = File.ReadAllText(file);
+
+					item.Add(new JProperty(file_name, content));
+
+				}
 
 			}
 
@@ -174,8 +191,10 @@ namespace Struct_Generator
 
 			}
 
-			Console.WriteLine("Saved as: " + name);
+			Console.ForegroundColor = ConsoleColor.Green;		
 			File.WriteAllText(Config.templatesPath + "\\" + name, template.ToString());
+			Console.WriteLine("Saved as: " + name);
+			Console.ForegroundColor = ConsoleColor.White;
 
 		}
 		private static JObject folderContent(string folder, JObject parent_folder)
@@ -202,7 +221,6 @@ namespace Struct_Generator
 						JArray myarray = (JArray)parent_folder[dir_name];
 
 						JObject item = (JObject)myarray[0];
-
 
 						foreach (string file in Directory.GetFiles(dir))
 						{
