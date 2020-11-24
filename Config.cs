@@ -14,6 +14,7 @@ namespace Struct_Generator
 		static public string aplicationLocation = AppDomain.CurrentDomain.BaseDirectory;
 		public static bool projectEnvironment()
 		{
+			//Create a dir application data
 			try
 			{
 				if (!Directory.Exists(configPath))
@@ -24,8 +25,7 @@ namespace Struct_Generator
 			catch
 			{
 				return false;
-			}
-			
+			}		
 				
 		}
 		public static bool setPath()
@@ -36,12 +36,16 @@ namespace Struct_Generator
 				var scope = EnvironmentVariableTarget.Machine;
 				string oldValue = Environment.GetEnvironmentVariable("Path", scope);
 				Environment.SetEnvironmentVariable("Path", oldValue + ";" + aplicationLocation, scope);
-				Console.WriteLine("Variable de entorno añadida.");
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.WriteLine("Added to the path.");
+				Console.ForegroundColor = ConsoleColor.White;
 				return true;
 			}
 			catch
 			{
+				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine("Is mandatory open with elevated permisions");
+				Console.ForegroundColor = ConsoleColor.White;
 				return false;
 			}
 

@@ -13,7 +13,6 @@ namespace Struct_Generator
 {
 	class Program
 	{
-		static private string options;//Futuro
 		static private string current_directory = Environment.CurrentDirectory;
 		static void Main(string[] args)
 		{
@@ -35,6 +34,7 @@ namespace Struct_Generator
 				else
 					arguments = true;
 
+				//If any argument is passed 
 				while (!arguments)
 				{
 					string line = Console.ReadLine();
@@ -44,6 +44,7 @@ namespace Struct_Generator
 						case "done":
 						case "":
 							arguments = true;
+							Console.WriteLine("Bye bye!");
 							continue;
 						case "list":
 						case "help":
@@ -78,32 +79,33 @@ namespace Struct_Generator
 						default:
 							Console.WriteLine("Invalid command or argument");
 							break;
-
 					}
 
 
 				}
 				
 			}
-
-			switch (String.Join(" ", args))
+			//When execute app with arguments
+			if (args.Length > 0)
 			{
-				case var template when (Regex.Match(String.Join(" ", args).ToLower(), @"-a \w{1}", RegexOptions.IgnoreCase).Success):
-					Commands.createStructure(args[args.Length-1]);
-					break;
-				case var template when (Regex.Match(String.Join(" ", args).ToLower(), @"-c \w{1}", RegexOptions.IgnoreCase).Success):
-					Commands.createTemplateBase(args[1]);
-					break;
-				case "templates":
-					Commands.templates();
-					break;
-				default:
-					Console.ForegroundColor = ConsoleColor.Red;
-					Console.WriteLine("Invalid Arguments, write structe_generator whithout arguments for more info.");
-					break;
+				switch (String.Join(" ", args))
+				{
+					case var template when (Regex.Match(String.Join(" ", args).ToLower(), @"-a \w{1}", RegexOptions.IgnoreCase).Success):
+						Commands.createStructure(args[args.Length - 1]);
+						break;
+					case var template when (Regex.Match(String.Join(" ", args).ToLower(), @"-c \w{1}", RegexOptions.IgnoreCase).Success):
+						Commands.createTemplateBase(args[1]);
+						break;
+					case "templates":
+						Commands.templates();
+						break;
+					default:
+						Console.ForegroundColor = ConsoleColor.Red;
+						Console.WriteLine("Invalid Arguments, execute application whithout arguments for more info.");
+						break;
+				}
+				Console.ForegroundColor = ConsoleColor.White;
 			}
-			Console.ForegroundColor = ConsoleColor.White;
-
 		}
 	}
 }

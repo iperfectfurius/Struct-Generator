@@ -17,11 +17,11 @@ namespace Struct_Generator
 			Console.Clear();
 			Console.WriteLine("list:			Display all commands available.\r\n");
 			Console.WriteLine("help -n:		Display and explain an expample template.\r\n");
-			Console.WriteLine("templates:		Display all templates available(" + Config.configPath + ")\r\n");
+			Console.WriteLine("templates:		Display all templates available (" + Config.configPath + ")\r\n");
 			Console.WriteLine("templates [template]:	Open template file.\r\n");
 			Console.WriteLine("templates -c:		Create a template that contains all of target folder (BETA)\r\n");
 			Console.WriteLine("-n [template]:		Create a new template.\r\n");
-			Console.WriteLine("-t [template]:		Set a template for a target folder\r\n");
+			Console.WriteLine("-a [template]:		Generate structure of the template to a target folder\r\n");
 			Console.WriteLine("setpath:		Add a path variable to this aplication (if you move this application to a new folder you need to set again this command)\r\n");
 		}
 		public static void templates()
@@ -35,20 +35,26 @@ namespace Struct_Generator
 				if (valid_templates.Length > 0)
 				{
 					Console.WriteLine("Templates found:(" + valid_templates.Length + ")\r\n");
-
+					Console.ForegroundColor = ConsoleColor.Blue;
 					foreach (string template in valid_templates)
 					{
+
 						Console.WriteLine(template);
 					}
+					Console.ForegroundColor = ConsoleColor.White;
 				}
 				else
 				{
+					Console.ForegroundColor = ConsoleColor.Red;
 					Console.WriteLine("No templates found!");
+					Console.ForegroundColor = ConsoleColor.White;
 				}
 			}
 			catch
 			{
+				Console.ForegroundColor = ConsoleColor.Red;
 				Console.WriteLine("Cant read templates!");
+				Console.ForegroundColor = ConsoleColor.White;
 			}
 
 		}
