@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.VisualBasic.FileIO;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,6 +22,7 @@ namespace Struct_Generator
 			Console.WriteLine("templates [template]:	Open template file.\r\n");
 			Console.WriteLine("templates -c:		Create a template that contains all of target folder (BETA)\r\n");
 			Console.WriteLine("-n [template]:		Create a new template.\r\n");
+			Console.WriteLine("-rm [template]:		Delete a template.\r\n");
 			Console.WriteLine("-a [template]:		Generate structure of the template to a target folder\r\n");
 			Console.WriteLine("setpath:		Add a path variable to this aplication (if you move this application to a new folder you need to set again this command)\r\n");
 		}
@@ -300,6 +302,33 @@ namespace Struct_Generator
 
 			}
 		}
+		public static void deleteTemplate(string template)
+		{
+			//Delete a template
+			if (validateTemplates(Directory.GetFiles(Config.templatesPath)).Any(template.Equals))
+			{
+				Console.ForegroundColor = ConsoleColor.Blue;
+				Console.WriteLine("Confirm with 'y' or 'n' to delete " + template);
+				template += ".json";
+
+				if (Console.ReadLine().Equals("y"))
+				{
+					//File.Delete(Config.templatesPath + '\\' + template);
+					FileSystem.DeleteFile(Config.templatesPath + '\\' + template, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+					Console.ForegroundColor = ConsoleColor.Green;
+					Console.WriteLine("Succesfully deleted.");
+					Console.ForegroundColor = ConsoleColor.White;
+
+				}
+			}
+			else
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine("No template with that name was found");
+				Console.ForegroundColor = ConsoleColor.White;
+			}
+		}
+
 		public static void example()
 		{
 			//not finished
@@ -342,12 +371,22 @@ namespace Struct_Generator
 
 			Console.WriteLine("Structre of example:\r\n");
 			Console.WriteLine(@"
-├────Target_folder
-│	├────css
-		 ├────styles.css
-		 ├────styles2.css");
-
-
+Target_folder
+ ├────config.ini
+ ├────css
+ │    ├────styles.css
+ │    └────styles2.css
+ │
+ └────img
+      ├────Exterior
+      │    ├────file.txt
+      │    └────file2.txt
+      │
+      └────Interior
+           ├────another.txt
+           └────another2.txt
+");
+			Console.WriteLine("So write your template or create one with the following command: 'templates -c' or pass with arguments -c [template_name]");
 		}
 	}
 

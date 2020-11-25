@@ -19,14 +19,17 @@ namespace Struct_Generator
 			{
 				if (!Directory.Exists(configPath))
 					Directory.CreateDirectory(configPath);
-					
+
+				if (!Directory.Exists(configPath + '\\' + "templates"))
+					Directory.CreateDirectory(configPath + '\\' + "templates");
+
 				return true;
 			}
 			catch
 			{
 				return false;
-			}		
-				
+			}
+
 		}
 		public static bool setPath()
 		{

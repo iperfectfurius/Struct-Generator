@@ -18,7 +18,6 @@ namespace Struct_Generator
 		{
 			Console.Clear();
 			Console.Title = "Struct Generator";
-
 			bool arguments = false;
 
 			if (Config.projectEnvironment())
@@ -28,7 +27,7 @@ namespace Struct_Generator
 					
 					Console.SetCursorPosition(Console.WindowWidth - ("Version: ".Length + Assembly.GetExecutingAssembly().GetName().Version.ToString().Length), 0);
 					Console.WriteLine("Version: " + Assembly.GetExecutingAssembly().GetName().Version.ToString());
-					Console.WriteLine("Please write any arguments:('-i' for interface,type help for more info)");
+					Console.WriteLine("Please write any arguments:('-i' for interface,type help for more info(work in progress))");
 					Console.WriteLine("Folder target: " + current_directory);
 				}
 				else
@@ -73,6 +72,9 @@ namespace Struct_Generator
 							}
 							Commands.createTemplateExample(line.ToLower().Split(' ')[1]);
 							break;
+						case var template when (Regex.Match(line.ToLower(), @"-rm \w{2}", RegexOptions.IgnoreCase).Success):
+							Commands.deleteTemplate(line.ToLower().Split(' ')[1]);
+							break;
 						case "setpath":
 							Config.setPath();
 							break;
@@ -84,6 +86,12 @@ namespace Struct_Generator
 
 				}
 				
+			}
+			else
+			{
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.WriteLine("Can't read applicattion folder!");
+				Console.ForegroundColor = ConsoleColor.White;
 			}
 			//When execute app with arguments
 			if (args.Length > 0)
