@@ -309,6 +309,7 @@ namespace Struct_Generator
 			{
 				Console.ForegroundColor = ConsoleColor.Blue;
 				Console.WriteLine("Confirm with 'y' or 'n' to delete " + template);
+				Console.ForegroundColor = ConsoleColor.White;
 				template += ".json";
 
 				if (Console.ReadLine().Equals("y"))
