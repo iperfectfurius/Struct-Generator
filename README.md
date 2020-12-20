@@ -30,3 +30,10 @@ Now you can open a cmd/powershell and type ***struct_generator*** followed by ar
 
 * **help**: List of commands.
 * **help -n**: Example of new template.
+* **templates**: Show all templates saved.
+* **templates -c**: Create a template based on target directory(Console current directory) that contains all root, files and content from files. 
+* **templates -a [name_of_template]**: Create a structure based on templates saved(templates are saved on applicationData folder, %appdata%/Struct_Generator/templates).
+* **templates [name_of_template]**: Show the selected template if exist.
+* **-n**: Create a default template and opened with default text editor.
+* **-rm [name_of_template]**: Delete a template.
+* **setpath**: Add Struct Generator to evironment variables.
