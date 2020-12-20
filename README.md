@@ -23,8 +23,10 @@ Now you can open a cmd/powershell and type ***struct_generator*** followed by ar
 ## Arguments
 
 * **-a [name_of_template]**: Create a structure based on templates saved(templates are saved on applicationData folder, %appdata%/Struct_Generator/templates).
-* **-c [name of template]**: Create a template based on target directory(Console current directory).
+* **-c [name of template]**: Create a template based on target directory(Console current directory) that contains all root, files and content from files.
 * **templates**: Show all templates saved.
 
 ## In-app commands
 
+* **help**: List of commands.
+* **help -n**: Example of new template.
