@@ -12,4 +12,8 @@ You can make your own templates if you don't have a actual structure.
 #### Recomended
 
 Download the latest version of [Struct-Generator](https://github.com/iperfectfurius/Struct-Generator/releases).
-Save the file wherever you want, then execute with elevated permissions(only first time) and write ***setpath*** and enter.
+Save the file wherever you want, then execute with elevated permissions(only first time) and write ***setpath*** command and enter. [Example](https://i.ibb.co/1LSMFgR/ezgif-com-gif-maker-1.gif)
+
+Now you can open a cmd/powershell and type ***struct_generator*** followed by argumets if you want.
+
+
